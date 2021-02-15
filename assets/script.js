@@ -20,29 +20,33 @@ const btnGoBack = document.querySelector("#goBack");
 
 const btnClearScore = document.querySelector("#clearScore"); //use .pop to remove last entry from array
 
-//view high scores <-- come back when high scores screen is done and use clickEvent to pull up screen
+//targets recordedScore and recordName text area
+
+const recordedScore = document.querySelector("#recordedScore"); //displays user score
+
+const recordName = document.querySelector("#recordName"); //lets user input initials
+
+//TODO: view high scores <-- come back when high scores screen is done and use clickEvent to pull up screen
 // function viewHighScores() {}
 
 //countdown: timer counts down from 90 seconds during entire game. When complete, displays enterHighScore
 function countdown() {
     let timeLeft = 90;
   
-    // Use the `setInterval()` method to call a function to be executed every 1000 milliseconds
     const timeInterval = setInterval(function () {
-      // As long as the `timeLeft` is greater than 1
       if (timeLeft > 1) {
-        // Set the `textContent` of `timer` to show the remaining seconds
         timer.textContent = "Time Left: " + timeLeft;
-        // Decrement `timeLeft` by 1
         timeLeft--;
-      } else {
-        // Once `timeLeft` gets to 0, set `timer` to an empty string
+      } 
+      //TODO: add statement that stops timer if all questions were answered before time runs out. send user to enterHighScore
+      else {
         timer.textContent = '';
-        // Use `clearInterval()` to stop the timer
         clearInterval(timeInterval);
-        //ClickEvent to return to welcomeScreen
+        //TODO: send user to enterHighScore
       }
     }, 1000);
   }
 
 countdown();
+
+//TODO: button clickEvents
