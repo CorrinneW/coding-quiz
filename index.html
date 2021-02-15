@@ -1,8 +1,55 @@
 <!DOCTYPE html>
 <html lang="eng-us">
     <header>
-        <title>Coding Quiz</title>
-        <meta charset="UTF-8"/>
-        
+        <title>Javascript Quiz</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="assets/style.css">
+        <link rel="stylesheet" type="text/css" href="assets/normalize.css/normalize.css">
     </header>
+
+    <!--Contains timer and view high score link at top of page-->
+    <div class="container" id="topBar">
+        <div id="highScore">View High Score</div>
+        <div id="timer"></div>
+    </div>
+
+    <!--Contains Start Page, Questions, High Score Entry and View High Score-->
+    <div class="container">
+        <!--Welcome Screen-->
+        <section class="newScreen" id="welcome">
+            <h1>Coding Quiz</h1>
+            <p>Test your Javascript knowledge with this quiz! Answer as many questions as you can in 90 seconds and try to get the high score.</p>
+            <btn id="startQuiz">Click to Start</btn>
+        </section>
+
+        <!--Questions Screen-->
+        <section class="newScreen" id="question">
+            <h2 id="questionText"></h2>
+            <div class="answers">
+            </div>
+        </section>
+
+        <!--High Score Entry Screen-->
+        <section class="newScreen" id="hsEntry">
+            <h2 id="recordedScore"></h2>
+            <textarea id="recordName" name="Enter Your Initials"></textarea>
+            <btn id="logScore">Log High Score</btn>
+        </section>
+
+        <!--List of High Scores-->
+        <section class="newScreen" id="scoreList">
+            <h2>High Scores</h2>
+            <div id="highScores"></div>
+            <btn id="goBack">Go Back</btn>
+            <bt id="clearScore">Clear Score</bt>
+        </section>
+
+    </div>
+
+    <body>
+        
+
+    </body>
+
+    <script src="assets/script.js"></script>
 </html>
