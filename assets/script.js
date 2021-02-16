@@ -50,3 +50,7 @@ function countdown() {
 countdown();
 
 //TODO: button clickEvents
+btnStartQuiz.addEventListener("click", function() {
+    welcomeScreen.style.display = "none";
+    questionScreen.style.display = "flex";
+});
