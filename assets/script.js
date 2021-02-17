@@ -66,20 +66,129 @@ btnStartQuiz.addEventListener("click", function() {
 countdown();
 
 //TODO: questions and answers
-//creates content for question screen
-questionText.textContent = "Question 1: Which of these is NOT a JavaScript Data type?";
+// //creates content for question screen
+// questionText = [
+//   q1:"Which of these is NOT a JavaScript data type?",
+//   q2:"What does a for loop do?",
+//   q3:"What is a block of code designed to perform a particular task called?",
+//   q4:"What does Math.floor do?",
+//   q5:"How is an ID represented in JavaScript?"
+//   q6:"How is a single-line comment denoted in Javascript?"
+//   q7:"Which keyword is used for variables that cannot be reassigned?"
+//   q8:"How is an Object Property denoted?"
+//   q9:"What is it called when you code without the use of third party APIs?"
+//   q10:"Which keyword stops the execution of JavaScript and calls, if available, the browser's debugging function?"
+// ]
 
-let textContents = ["Number", "String", "Booyah", "Object"];
-for(var i = 0; i < textContents.length; i++) {
-  var li = document.createElement("li");
-  li.textContent = textContents[i];
-  li.setAttribute("style", `color:white; background: var(--darkShade); margin-top: 15px; padding: 15px;`);
-  answersList.appendChild(li);
+let questionsArray = [
+  {
+    question: "Which of these is NOT a JavaScript data type?",
+    answerChoices: ["Number", "String", "Booyah", "Object"],
+    correctAnswer: "Booyah"
+  },
+  {
+    question: "What does a for loop do?",
+    answerChoices: ["Repeats a block of code a specified number of times", "Repeats a block of code while a condition is true", "Loops through the properties of an object", "Specifies many alternative blocks of code to be executed."],
+    correctAnswer: "Repeats a block of code a specified number of times"
+  },
+  {
+    question: "What is a block of code designed to perform a particular task called?",
+    answerChoices: ["Object", "Function", "Event", "Array"],
+    correctAnswer: "Function"
+  },
+  {
+    question: "What does Math.floor do?",
+    answerChoices: ["Rounds up to the nearest integer.", "Returns the lowest value in a list of arguments.", "Returns a random number.", "Rounds down to the nearest integer."],
+    correctAnswer: "Rounds down to the nearest integer."
+  },
+  {
+    question: "How is an ID represented in JavaScript?",
+    answerChoices: [".myItem", "#myItem", "@myItem", "$myItem"],
+    correctAnswer: "#myItem"
+  },
+  {
+    question: "How is a single-line comment denoted in Javascript?",
+    answerChoices: ["<!--comment-->", "/*comment*/", "{comment}", "//comment"],
+    correctAnswer: "//comment"
+  },
+  {
+    question: "Which keyword is used for variables that cannot be reassigned?",
+    answerChoices: ["var", "const", "let", "function"],
+    correctAnswer: "const"
+  },
+  {
+    question: "How is an Object Property denoted?",
+    answerChoices: ["name:value", "name(value)", "name.value", "nameValue"],
+    correctAnswer: "name:value"
+  },
+  {
+    question: "What is it called when you write code without the use of third party APIs?",
+    answerChoices: ["Plain Javascript", "Bland Javascript", "Tasty Javascript", "Vanilla Javascript"],
+    correctAnswer: "Vanilla Javascript"
+  },
+  {
+    question: "Which keyword removes the last item of an array?",
+    answerChoices: ["array.push()", "array.pop()", "array.slice()", "array.shift()"],
+    correctAnswer: "array.pop()"
+  },
+]
+
+let questionsCount = 0;
+
+function playQuestions() {
+  questionText.textContent = '';
+  answersList.textContent = '';
+  questionText.textContent = questionsArray[questionsCount].question;
+
+  for(var i = 0; i < questionsArray[questionsCount].answerChoices.length; i++) {
+    var li = document.createElement("li");
+    li.textContent = questionsArray[questionsCount].answerChoices[i];
+    li.setAttribute("style", `color:white; background: var(--darkShade); margin-top: 15px; padding: 15px;`);
+    answersList.appendChild(li);
+    li.addEventListener('click', function() {
+      console.log("clicked");
+      if (this.textContent === questionsArray[questionsCount].correctAnswer) {
+        //add points to score
+        console.log('correct');
+      } else {
+        //subtract time from timer
+        console.log('wrong');
+      }
+      setTimeout(function() {
+        //move to next question
+        
+        while (questionsCount < questionsArray.length-1) {
+          questionsCount++;
+          playQuestions();
+
+          if (questionsCount === questionsArray.length-1) {
+            //call funcition to end
+            break;
+          }
+        }
+
+      },2000)
+    })
+  }
 }
 
-questionScreen.appendChild(questionText);
-questionScreen.appendChild(answersList);
+playQuestions();
 
-//TODO: High Score Entry
 
-//TODO: Score List
+// // let textContents = ["Number", "String", "Booyah", "Object"];
+
+
+// // questionScreen.appendChild(questionText);
+// // questionScreen.appendChild(answersList);
+
+// // answersList.li.addEventListener("click", function() {})
+
+// //TODO: High Score Entry
+
+// let userScore = 0;
+
+// //function to control scoring
+
+// recordedScore.textContent = "Your Score Is" + userScore;
+
+// //TODO: Score List
