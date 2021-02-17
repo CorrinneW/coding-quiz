@@ -5,11 +5,15 @@ const timer = document.querySelector("#timer");
 
 const welcomeScreen = document.querySelector("#welcome");
 
-const questionScreen = document.querySelector("question");
+const questionScreen = document.querySelector("#questions");
 
 const enterHighScore = document.querySelector("#hsEntry");
 
 const scoreList = document.querySelector("#scoreList");
+
+const questionText = document.querySelector("#questionText");
+
+const answersList = document.querySelector("#answerList");
 
 //targets HTML buttons. Buttons use clickEvent to display desired section and hide others.
 const btnStartQuiz = document.querySelector("#startQuiz");
@@ -37,20 +41,45 @@ function countdown() {
       if (timeLeft > 1) {
         timer.textContent = "Time Left: " + timeLeft;
         timeLeft--;
-      } 
-      //TODO: add statement that stops timer if all questions were answered before time runs out. send user to enterHighScore
+      } else if (questionsLeft === 0) {
+        timer.textContent = '';
+        clearInterval(timeInterval);
+        questionScreen.style.display = "none";
+        enterHighScore.style.display = "flex";
+      }
       else {
         timer.textContent = '';
         clearInterval(timeInterval);
-        //TODO: send user to enterHighScore
+        questionScreen.style.display = "none";
+        enterHighScore.style.display = "flex";
       }
     }, 1000);
-  }
-
-countdown();
+    }
 
 //TODO: button clickEvents
+
+//start quiz button
 btnStartQuiz.addEventListener("click", function() {
     welcomeScreen.style.display = "none";
     questionScreen.style.display = "flex";
 });
+countdown();
+
+//TODO: questions and answers
+//creates content for question screen
+questionText.textContent = "Question 1: Which of these is NOT a JavaScript Data type?";
+
+let textContents = ["Number", "String", "Booyah", "Object"];
+for(var i = 0; i < textContents.length; i++) {
+  var li = document.createElement("li");
+  li.textContent = textContents[i];
+  li.setAttribute("style", `color:white; background: var(--darkShade); margin-top: 15px; padding: 15px;`);
+  answersList.appendChild(li);
+}
+
+questionScreen.appendChild(questionText);
+questionScreen.appendChild(answersList);
+
+//TODO: High Score Entry
+
+//TODO: Score List
