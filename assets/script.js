@@ -15,6 +15,8 @@ const questionText = document.querySelector("#questionText");
 
 const answersList = document.querySelector("#answerList");
 
+const asnwerStatus = document.querySelector("#answerStatus")
+
 //targets HTML buttons. Buttons use clickEvent to display desired section and hide others.
 const btnStartQuiz = document.querySelector("#startQuiz");
 
@@ -34,52 +36,37 @@ const recordName = document.querySelector("#recordName"); //lets user input init
 // function viewHighScores() {}
 
 //countdown: timer counts down from 90 seconds during entire game. When complete, displays enterHighScore
-function countdown() {
-    let timeLeft = 90;
-  
-    const timeInterval = setInterval(function () {
-      if (timeLeft > 1) {
-        timer.textContent = "Time Left: " + timeLeft;
-        timeLeft--;
-      } else if (questionsLeft === 0) {
-        timer.textContent = '';
-        clearInterval(timeInterval);
-        questionScreen.style.display = "none";
-        enterHighScore.style.display = "flex";
-      }
-      else {
-        timer.textContent = '';
-        clearInterval(timeInterval);
-        questionScreen.style.display = "none";
-        enterHighScore.style.display = "flex";
-      }
-    }, 1000);
-    }
+let timeLeft = 90;
 
-//TODO: button clickEvents
+function countdown() {
+  const timeInterval = setInterval(function () {
+    if (timeLeft > 1) {
+      timer.textContent = "Time Left: " + timeLeft;
+      timeLeft--;
+    } else if (questionsLeft === 0) {
+      timer.textContent = '';
+      clearInterval(timeInterval);
+      questionScreen.style.display = "none";
+      enterHighScore.style.display = "flex";
+    } else {
+      timer.textContent = '';
+      clearInterval(timeInterval);
+      questionScreen.style.display = "none";
+      enterHighScore.style.display = "flex";
+    }
+  }, 1000);
+}
 
 //start quiz button
 btnStartQuiz.addEventListener("click", function() {
     welcomeScreen.style.display = "none";
     questionScreen.style.display = "flex";
+    countdown();
+    playQuestions();
 });
-countdown();
 
-//TODO: questions and answers
-// //creates content for question screen
-// questionText = [
-//   q1:"Which of these is NOT a JavaScript data type?",
-//   q2:"What does a for loop do?",
-//   q3:"What is a block of code designed to perform a particular task called?",
-//   q4:"What does Math.floor do?",
-//   q5:"How is an ID represented in JavaScript?"
-//   q6:"How is a single-line comment denoted in Javascript?"
-//   q7:"Which keyword is used for variables that cannot be reassigned?"
-//   q8:"How is an Object Property denoted?"
-//   q9:"What is it called when you code without the use of third party APIs?"
-//   q10:"Which keyword stops the execution of JavaScript and calls, if available, the browser's debugging function?"
-// ]
 
+//quiz questions and answers
 let questionsArray = [
   {
     question: "Which of these is NOT a JavaScript data type?",
@@ -128,19 +115,22 @@ let questionsArray = [
   },
   {
     question: "Which keyword removes the last item of an array?",
-    answerChoices: ["array.push()", "array.pop()", "array.slice()", "array.shift()"],
-    correctAnswer: "array.pop()"
-  },
+    answerChoices: ["myArray.push()", "myArray.pop()", "myArray.slice()", "myArray.shift()"],
+    correctAnswer: "myArray.pop()"
+  }
 ]
 
 let questionsCount = 0;
 
+let userScore = 0;
+
 function playQuestions() {
   questionText.textContent = '';
   answersList.textContent = '';
+  answerStatus.textContent = '';
   questionText.textContent = questionsArray[questionsCount].question;
 
-  for(var i = 0; i < questionsArray[questionsCount].answerChoices.length; i++) {
+  for(var i = questionsCount; i < questionsArray[questionsCount].answerChoices.length; i++) {
     var li = document.createElement("li");
     li.textContent = questionsArray[questionsCount].answerChoices[i];
     li.setAttribute("style", `color:white; background: var(--darkShade); margin-top: 15px; padding: 15px;`);
@@ -148,15 +138,16 @@ function playQuestions() {
     li.addEventListener('click', function() {
       console.log("clicked");
       if (this.textContent === questionsArray[questionsCount].correctAnswer) {
-        //add points to score
-        console.log('correct');
+        answerStatus.textContent = 'Correct!';
+        //add point to score
       } else {
-        //subtract time from timer
-        console.log('wrong');
+        answerStatus.textContent = 'Incorrect';
+        //subtract time from countdown
       }
+      setTimeout();
+      
       setTimeout(function() {
-        //move to next question
-        
+        //move to next question        
         while (questionsCount < questionsArray.length-1) {
           questionsCount++;
           playQuestions();
@@ -167,21 +158,10 @@ function playQuestions() {
           }
         }
 
-      },2000)
+      },1000)
     })
   }
 }
-
-playQuestions();
-
-
-// // let textContents = ["Number", "String", "Booyah", "Object"];
-
-
-// // questionScreen.appendChild(questionText);
-// // questionScreen.appendChild(answersList);
-
-// // answersList.li.addEventListener("click", function() {})
 
 // //TODO: High Score Entry
 
