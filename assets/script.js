@@ -1,5 +1,5 @@
 //targets corresponding HTML sections
-const highScore = document.querySelector("#highScore");
+const highScores = document.querySelector("#highScores");
 
 const timer = document.querySelector("#timer");
 
@@ -43,28 +43,26 @@ function countdown() {
     if (timeLeft > 1) {
       timer.textContent = "Time Left: " + timeLeft;
       timeLeft--;
-    } else if (questionsLeft === 0) {
-      timer.textContent = '';
-      clearInterval(timeInterval);
-      questionScreen.style.display = "none";
-      enterHighScore.style.display = "flex";
     } else {
-      timer.textContent = '';
       clearInterval(timeInterval);
-      questionScreen.style.display = "none";
-      enterHighScore.style.display = "flex";
+      endQuiz();
     }
   }, 1000);
 }
 
 //start quiz button
 btnStartQuiz.addEventListener("click", function() {
-    welcomeScreen.style.display = "none";
-    questionScreen.style.display = "flex";
-    countdown();
-    playQuestions();
+  welcomeScreen.style.display = "none";
+  questionScreen.style.display = "flex";
+  countdown();
+  playQuestions();
 });
 
+function endQuiz() {
+  timer.textContent = '';
+  questionScreen.style.display = "none";
+  enterHighScore.style.display = "flex";
+}
 
 //quiz questions and answers
 let questionsArray = [
@@ -128,47 +126,57 @@ function playQuestions() {
   questionText.textContent = '';
   answersList.textContent = '';
   answerStatus.textContent = '';
+
   questionText.textContent = questionsArray[questionsCount].question;
 
-  for(var i = questionsCount; i < questionsArray[questionsCount].answerChoices.length; i++) {
+  for(var i = 0; i < questionsArray[questionsCount].answerChoices.length; i++) {
     var li = document.createElement("li");
     li.textContent = questionsArray[questionsCount].answerChoices[i];
     li.setAttribute("style", `color:white; background: var(--darkShade); margin-top: 15px; padding: 15px;`);
     answersList.appendChild(li);
     li.addEventListener('click', function() {
-      console.log("clicked");
-      if (this.textContent === questionsArray[questionsCount].correctAnswer) {
+        if (this.textContent === questionsArray[questionsCount].correctAnswer) {
         answerStatus.textContent = 'Correct!';
-        //add point to score
+        userScore = userScore + 100;
+        localStorage.setItem("userScore", userScore);
       } else {
         answerStatus.textContent = 'Incorrect';
-        //subtract time from countdown
+        timeLeft = timeLeft - 10;
       }
-      setTimeout();
+      nextQuestion();
       
-      setTimeout(function() {
-        //move to next question        
-        while (questionsCount < questionsArray.length-1) {
-          questionsCount++;
-          playQuestions();
+      function nextQuestion() {
+        setTimeout(function() {
+          //move to next question        
+          while (questionsCount < questionsArray.length-1) {
+            questionsCount++;
+            playQuestions();
 
-          if (questionsCount === questionsArray.length-1) {
-            //call funcition to end
-            break;
+            if (questionsCount === questionsArray.length-1) {
+              endQuiz();
+            }
           }
-        }
 
-      },1000)
+        },1000)
+       }
     })
   }
 }
 
 // //TODO: High Score Entry
+recordedScore.textContent = "Your Score Is: " + localStorage.getItem("userScore", userScore);
 
-// let userScore = 0;
+//log high score button
+btnLogScore.addEventListener("click", function(event) {
+  var initials = recordName.value.trim();
+  console.log(initials)
+  event.preventDefault();
+  localStorage.setItem("initials", JSON.stringify(initials));
+  console.log(localStorage);
+  enterHighScore.style.display = "none";
+  scoreList.style.display = "flex"; 
+})
 
-// //function to control scoring
+//TODO: Score List
+const allScores = [];
 
-// recordedScore.textContent = "Your Score Is" + userScore;
-
-// //TODO: Score List
