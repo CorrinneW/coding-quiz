@@ -131,11 +131,12 @@ function setQuestion() {
   answersList.textContent=''
   
   console.log(questionsArray[questionsCount]);
+
   questionText.textContent = questionsArray[questionsCount].question;
   
   // for loop creates list items with answer choices that propagate to answersList
   // pulls 
-  for (var i = 0; i <= questionsArray[questionsCount].answerChoices.length; i++) {
+  for (var i = 0; i < questionsArray[questionsCount].answerChoices.length; i++) {
     var li = document.createElement("li");
     li.textContent = questionsArray[questionsCount].answerChoices[i];
     li.setAttribute("style", `color:white; background: var(--darkShade); margin-top: 15px; padding: 15px;`);
@@ -162,13 +163,14 @@ function nextQuestion() {
   questionsCount++;
   setQuestion();
   if (questionsCount === questionsArray.length-1) {
-    endQuiz;
+    endQuiz();
   }
 }
 
 function endQuiz() {
+  console.log('game over');
   timer.textContent = '';
-  clearInterval(timeInterval);  
+  clearInterval(timeInterval); 
   questionScreen.style.display = "none";
   enterHighScore.style.display = "flex";
 }
@@ -182,12 +184,14 @@ const allScores = [];
 
 //log high score button
 btnLogScore.addEventListener("click", function (event) {
+  //grabs initials from recordName input
   var initials = recordName.value.trim();
   console.log(initials)
-  event.preventDefault();
+  //converts initials to string and saves to local storage
   localStorage.setItem("initials", JSON.stringify(initials));
   var scoreRecord = initials + ": " + userScore;
   allScores.push(scoreRecord);
+  console.log(allScores);
   enterHighScore.style.display = "none";
   scoreList.style.display = "flex";
 })
