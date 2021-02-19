@@ -116,21 +116,22 @@ let timeInterval;
 
 function countdown() {
   timeInterval = setInterval(function () {
-    if (timeLeft > 1) {
+    if (timeLeft >= 1) {
       timer.textContent = "Time Left: " + timeLeft;
       timeLeft--;
-    } else if (timeLeft === 0 || questionsCount === questionsArray.length - 1) {
-      clearInterval(timeInterval);
-      timer.textContent = '';
-      questionScreen.style.display = "none";
-      enterHighScore.style.display = "flex";
+    } else if (timeLeft === 0) {
+      endQuiz();
     }
   }, 1000);
 }
 
 function setQuestion() {
+  answersList.textContent=''
+  console.log(questionsArray[questionsCount]);
   questionText.textContent = questionsArray[questionsCount].question;
-
+  
+  // for loop creates list items with answer choices that propagate to answersList
+  // pulls 
   for (var i = 0; i < questionsArray[questionsCount].answerChoices.length; i++) {
     var li = document.createElement("li");
     li.textContent = questionsArray[questionsCount].answerChoices[i];
@@ -141,24 +142,30 @@ function setQuestion() {
         answerStatus.textContent = 'Correct!';
         userScore = userScore + 100;
         localStorage.setItem("userScore", userScore);
-              } else {
+      } else {
         answerStatus.textContent = 'Incorrect';
         timeLeft = timeLeft - 10;
-      }      
-      nextQuestion();    
-    })
-  }
+      }
+      nextQuestion();         
+    })    
+  }  
 }
 
 function nextQuestion() {
-  if (questionsCount < questionsArray.length) {
-    questionsCount++;
-    answersList.textContent = '';
-    setQuestion();
-  } else {
-    //call game over function
-    console.log("game over");
+  console.log(questionsCount);
+  console.log(questionsArray.length);
+  questionsCount++;
+  setQuestion();
+  if (questionsCount === questionsArray.length - 1) {
+    endQuiz;
   }
+}
+
+function endQuiz() {
+  timer.textContent = '';
+  clearInterval(timeInterval);  
+  questionScreen.style.display = "none";
+  enterHighScore.style.display = "flex";
 }
 
 

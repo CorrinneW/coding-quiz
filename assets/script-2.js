@@ -35,34 +35,12 @@ const recordName = document.querySelector("#recordName"); //lets user input init
 //TODO: view high scores <-- come back when high scores screen is done and use clickEvent to pull up screen
 // function viewHighScores() {}
 
-//countdown: timer counts down from 90 seconds during entire game. When complete, displays enterHighScore
-let timeLeft = 90;
-
-function countdown() {
-  const timeInterval = setInterval(function () {
-    if (timeLeft > 1) {
-      timer.textContent = "Time Left: " + timeLeft;
-      timeLeft--;
-    } else {
-      clearInterval(timeInterval);
-      endQuiz();
-    }
-  }, 1000);
-}
-
 //start quiz button
-btnStartQuiz.addEventListener("click", function() {
+btnStartQuiz.addEventListener("click", function () {
   welcomeScreen.style.display = "none";
   questionScreen.style.display = "flex";
-  countdown();
-  playQuestions();
+  playQuiz();
 });
-
-function endQuiz() {
-  timer.textContent = '';
-  questionScreen.style.display = "none";
-  enterHighScore.style.display = "flex";
-}
 
 //quiz questions and answers
 let questionsArray = [
@@ -122,41 +100,75 @@ let questionsCount = 0;
 
 let userScore = 0;
 
-function playQuestions() {
+let timeLeft = 90;
+
+function playQuiz() {
   questionText.textContent = '';
   answersList.textContent = '';
   answerStatus.textContent = '';
 
-  questionText.textContent = questionsArray[questionsCount].question;
+  countdown();
+  //countdown: timer counts down from 90 seconds during entire game. When complete, displays enterHighScore
+  setQuestion();
+}
 
-  for(var i = 0; i < questionsArray[questionsCount].answerChoices.length; i++) {
+let timeInterval;
+
+function countdown() {
+  timeInterval = setInterval(function () {
+    if (timeLeft >= 1) {
+      timer.textContent = "Time Left: " + timeLeft;
+      timeLeft--;
+    } else if (timeLeft === 0) {
+      endQuiz();
+    }
+  }, 1000);
+}
+
+function setQuestion() {
+  console.log(questionsArray[questionsCount]);
+  questionText.textContent = questionsArray[questionsCount].question;
+  
+  //creates list items with answer choices that propagate to answersList
+  for (var i = 0; i < questionsArray[questionsCount].answerChoices.length; i++) {
     var li = document.createElement("li");
     li.textContent = questionsArray[questionsCount].answerChoices[i];
     li.setAttribute("style", `color:white; background: var(--darkShade); margin-top: 15px; padding: 15px;`);
     answersList.appendChild(li);
-    li.addEventListener('click', function() {
-        if (this.textContent === questionsArray[questionsCount].correctAnswer) {
+    li.addEventListener('click', function () {
+      if (this.textContent === questionsArray[questionsCount].correctAnswer) {
         answerStatus.textContent = 'Correct!';
         userScore = userScore + 100;
         localStorage.setItem("userScore", userScore);
       } else {
         answerStatus.textContent = 'Incorrect';
         timeLeft = timeLeft - 10;
-      }
-      nextQuestion();
-  })
-  function nextQuestion() {
-    setTimeout(function() {
-      //move to next question        
-      while (questionsCount < questionsArray.length-1) {
-        questionsCount++;
-        playQuestions();
-      } if (questionsCount === questionsArray.length-1) {
-        endQuiz();
-      }
-    },1000)
+      }      
+      nextQuestion();    
+    })
   }
-  })
+}
+
+function nextQuestion() {
+  console.log(questionsCount);
+  console.log(questionsArray.length);
+  questionsCount++;
+  if (questionsCount === questionsArray.length -1) {
+    endQuiz;
+  }
+  // if (questionsCount <= questionsArray.length-1) {
+  //   answersList.textContent = '';
+  //   setQuestion();
+  // } else {
+  //   endQuiz();
+  // }
+}
+
+function endQuiz() {
+  timer.textContent = '';
+  clearInterval(timeInterval);  
+  questionScreen.style.display = "none";
+  enterHighScore.style.display = "flex";
 }
 
 
@@ -167,7 +179,7 @@ recordedScore.textContent = "Your Score Is: " + localStorage.getItem("userScore"
 const allScores = [];
 
 //log high score button
-btnLogScore.addEventListener("click", function(event) {
+btnLogScore.addEventListener("click", function (event) {
   var initials = recordName.value.trim();
   console.log(initials)
   event.preventDefault();
@@ -175,17 +187,17 @@ btnLogScore.addEventListener("click", function(event) {
   var scoreRecord = initials + ": " + userScore;
   allScores.push(scoreRecord);
   enterHighScore.style.display = "none";
-  scoreList.style.display = "flex"; 
+  scoreList.style.display = "flex";
 })
 
 //TODO: Score List
 highScores.textContent = allScores;
 
-btnGoBack.addEventListener("click", function() {
+btnGoBack.addEventListener("click", function () {
   scoreList.style.display = "none";
   welcomeScreen.style.display = "flex";
 })
 
-btnClearScore.addEventListener("click", function() {
+btnClearScore.addEventListener("click", function () {
   allScores.pop();
 })
