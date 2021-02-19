@@ -125,18 +125,23 @@ function countdown() {
   }, 1000);
 }
 
+//builds question using contents of array 
 function setQuestion() {
+  //resets answersList to be re-populated with the next object's answerChoices
   answersList.textContent=''
+  
   console.log(questionsArray[questionsCount]);
   questionText.textContent = questionsArray[questionsCount].question;
   
   // for loop creates list items with answer choices that propagate to answersList
   // pulls 
-  for (var i = 0; i < questionsArray[questionsCount].answerChoices.length; i++) {
+  for (var i = 0; i <= questionsArray[questionsCount].answerChoices.length; i++) {
     var li = document.createElement("li");
     li.textContent = questionsArray[questionsCount].answerChoices[i];
     li.setAttribute("style", `color:white; background: var(--darkShade); margin-top: 15px; padding: 15px;`);
     answersList.appendChild(li);
+
+    //controls what happens when a user clicks a right or wrong answer.
     li.addEventListener('click', function () {
       if (this.textContent === questionsArray[questionsCount].correctAnswer) {
         answerStatus.textContent = 'Correct!';
@@ -146,8 +151,8 @@ function setQuestion() {
         answerStatus.textContent = 'Incorrect';
         timeLeft = timeLeft - 10;
       }
-      nextQuestion();         
-    })    
+      nextQuestion();              
+    })       
   }  
 }
 
@@ -156,7 +161,7 @@ function nextQuestion() {
   console.log(questionsArray.length);
   questionsCount++;
   setQuestion();
-  if (questionsCount === questionsArray.length - 1) {
+  if (questionsCount === questionsArray.length-1) {
     endQuiz;
   }
 }
