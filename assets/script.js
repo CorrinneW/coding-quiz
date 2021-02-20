@@ -147,8 +147,8 @@ function setQuestion() {
       if (this.textContent === questionsArray[questionsCount].correctAnswer) {
         answerStatus.textContent = 'Correct!';
         userScore = userScore + 100;
-        localStorage.setItem("userScore", userScore);
-      } else {
+        localStorage.setItem("userScore", JSON.stringify(userScore));
+        } else {
         answerStatus.textContent = 'Incorrect';
         timeLeft = timeLeft - 10;
       }
@@ -160,10 +160,11 @@ function setQuestion() {
 function nextQuestion() {
   console.log(questionsCount);
   console.log(questionsArray.length);
+  if (questionsCount <= (questionsArray.length - 2)) {
   questionsCount++;
   setQuestion();
-  if (questionsCount === questionsArray.length-1) {
-    endQuiz();
+} else {
+    timeLeft=0;
   }
 }
 
@@ -178,26 +179,34 @@ function endQuiz() {
 
 
 // //TODO: High Score Entry
-recordedScore.textContent = "Your Score Is: " + localStorage.getItem("userScore", userScore);
+recordedScore.textContent = "Your Score Is: " + userScore;
 
-const allScores = [];
+var initials = getName.value.trim();
 
 //log high score button
 btnLogScore.addEventListener("click", function (event) {
-  //grabs initials from recordName input
-  var initials = recordName.value.trim();
-  console.log(initials)
-  //converts initials to string and saves to local storage
+  //converts lastScore to string and sets to local storage
   localStorage.setItem("initials", JSON.stringify(initials));
-  var scoreRecord = initials + ": " + userScore;
-  allScores.push(scoreRecord);
-  console.log(allScores);
+  //changes to high Scores page
   enterHighScore.style.display = "none";
   scoreList.style.display = "flex";
 })
 
+//stores last entered score in an object
+var lastScore = {
+  initials: JSON.parse(localStorage.getItem("initials")),
+  score: JSON.parse(localStorage.getItem("userScore"))
+};
+
+//brings lastScore object into an array containing all stored scores.
+var allScores = [];
+
+allScores.push(lastScore);
+localStorage.setItem("allScores", JSON.stringify("allScores"));
+console.log(allScores);
+
 //TODO: Score List
-highScores.textContent = allScores;
+highScores.textContent = JSON.parse(localStorage.getItem("allScores"));
 
 btnGoBack.addEventListener("click", function () {
   scoreList.style.display = "none";
@@ -205,5 +214,5 @@ btnGoBack.addEventListener("click", function () {
 })
 
 btnClearScore.addEventListener("click", function () {
-  allScores.pop();
+  lastScore.pop();
 })
