@@ -9,8 +9,8 @@
     <body>
         <!--Contains timer and view high score link at top of page-->
         <div class="container" id="topBar">
-            <div id="highScore">
-                View High Score
+            <div id="viewHighScores">
+                View High Scores
             </div>
             <div id="timer"></div>
         </div>
@@ -20,7 +20,10 @@
             <!--Welcome Screen-->
             <section class="newScreen" id="welcome">
                 <h1>Coding Quiz</h1>
-                <p>Test your Javascript knowledge with this quiz!<br/>Answer as many questions as you can and try to get the high score before the time runs out.<br/>Be careful! Each wrong answer deducts 10 seconds from your time left and 5 points from your final score.</p>
+                <p>Test your Javascript knowledge with this quiz!<br/>
+                    Answer as many questions as you can and try to get the high score before the time runs out.<br/>
+                    Be careful! Each wrong answer deducts 10 seconds from your time left and 5 points from your final score.
+                </p>
                 <btn id="startQuiz">Click to Start</btn>
             </section>
 
@@ -37,14 +40,13 @@
             <!--High Score Entry Screen-->
             <section class="newScreen" id="hsEntry">
                 <h2 id="recordedScore"></h2>
-                <textarea id="getName" name="Enter Your Initials"></textarea>
+                <input id="nameEntry" name="name" placeholder="Enter Your Initials"></input>
                 <btn id="logScore">Log High Score</btn>
             </section>
 
             <!--List of High Scores-->
             <section class="newScreen" id="scoreList">
                 <h2>High Scores</h2>
-                <div id="highScores"><p></p></div>
                 <btn id="goBack">Go Back</btn>
                 <btn id="clearScore">Clear Score</btn>
             </section>

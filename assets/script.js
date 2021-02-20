@@ -1,5 +1,5 @@
 //targets corresponding HTML sections
-const highScores = document.querySelector("#highScores");
+const viewHighScores = document.querySelector("#viewHighScores");
 
 const timer = document.querySelector("#timer");
 
@@ -27,15 +27,19 @@ const btnGoBack = document.querySelector("#goBack");
 const btnClearScore = document.querySelector("#clearScore"); //use .pop to remove last entry from array
 
 //targets recordedScore and recordName text area
-
 const recordedScore = document.querySelector("#recordedScore"); //displays user score
+const nameEntry = document.querySelector("#nameEntry");
 
-const recordName = document.querySelector("#recordName"); //lets user input initials
+let questionsCount = 0;
+let userScore = 0;
 
-//TODO: view high scores <-- come back when high scores screen is done and use clickEvent to pull up screen
-// function viewHighScores() {}
+//view high scores
+viewHighScores.addEventListener("click", function() {
+  welcomeScreen.style.display = "none";
+  scoreList.style.display = "flex";
+})
 
-//start quiz button hides welcomeScreen and loads questionScreen
+//start quiz button hides welcomeScreen and loads questionScreen. If replaying, start quiz button resets game.
 btnStartQuiz.addEventListener("click", function () {
   welcomeScreen.style.display = "none";
   questionScreen.style.display = "flex";
@@ -43,6 +47,8 @@ btnStartQuiz.addEventListener("click", function () {
   answersList.textContent = '';
   answerStatus.textContent = '';
   timeLeft = 60;
+  questionsCount = 0;
+  userScore = 0;
   countdown();
   setQuestion();
 });
@@ -101,7 +107,7 @@ let questionsArray = [
   }
 ]
 
-let questionsCount = 0;
+
 
 //quiz timer decrements 1/sec during game. Incorrect answers cause a 10 second decrement.
 let timeInterval;
@@ -117,7 +123,7 @@ function countdown() {
   }, 1000);
 }
 
-let userScore=0;
+
 
 //builds question using contents of array 
 function setQuestion() {
@@ -144,7 +150,6 @@ function setQuestion() {
         } else {
         answerStatus.textContent = 'Incorrect';
         timeLeft = timeLeft - 10;
-        userScore = userScore - 5;
       }
       nextQuestion();              
     })       
@@ -167,9 +172,8 @@ function nextQuestion() {
 }
 
 function endQuiz() {
+  console.log(userScore);
   recordedScore.textContent = "Your Score Is: " + userScore;
-  //sends userScore to local storage
-  localStorage.setItem("userScore", JSON.stringify(userScore))
   //resets timer
   timer.textContent = '';
   clearInterval(timeInterval); 
@@ -179,17 +183,64 @@ function endQuiz() {
 
 
 
-//High Score Entry
+//High Score Entry allows user to view their final score and add initials
+//saves score and initials for scoreList.
 
-btnLogScore.addEventListener("click", function () {
-  //pulls user input and stores it in local storage
-  var initials = getName.value.trim();
-  localStorage.setItem("initials", JSON.stringify(initials));
-  enterHighScore.style.display = "none";
-  scoreList.style.display = "flex";
+
+// Set up an array for highScores, which is going to be the item stored in localstorage or an empty array if it is the first time you play
+// Parse the string highScores to an array
+const highScoresArray = JSON.parse(localStorage.getItem('scoreObject')) || [];
+
+btnLogScore.addEventListener("click", function() {
+  if (nameEntry === '') {
+    alert("Name can not be blank!")
+  } else {
+    let scoreObject = {
+      userName:nameEntry.value,
+      score:userScore
+    }
+    //push scoreObject to highScoresArray
+    highScoresArray.push(scoreObject);
+    // Set scoreObject to localstorage
+    localStorage.setItem('scoreObject', JSON.stringify(highScoresArray));
+
+    enterHighScore.style.display = "none";
+    scoreList.style.display = "flex";
+  }
 });
 
-//High Score List...add current local storage initials and scores to an array and save array to local storage. display array on page.
+// Stringify the highScores
+
+
+//scoreList displays high scores and allows last entry to be cleared
+//need to store past scores in local storage and recall them to scoreList
+//need to add currentRecord to scoreList
+// let currentRecord;
+
+
+//formats name and score and adds it to highScoresArray
+// function renderScores() {
+//   highScores.innerHTML = "";
+//   currentRecord = JSON.parse(localStorage.getItem("userEntry.name"));
+//   console.log(currentRecord.name, currentRecord);
+//   highScoresArray.push(currentRecord);
+// }
+// renderScores();
+// console.log(highScoresArray);
+
+//returns user to welcome screen
+btnGoBack.addEventListener("click", function () {
+  scoreList.style.display = "none";
+  welcomeScreen.style.display = "flex";
+})
+
+//clears last scoreObject
+btnClearScore.addEventListener("click", function () {
+  JSON.parse(localStorage.)
+  highScoresArray.pop;
+})
+
+//function to add initials and score to an array
 
 
 
