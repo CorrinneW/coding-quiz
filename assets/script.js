@@ -206,27 +206,20 @@ btnLogScore.addEventListener("click", function() {
 
     enterHighScore.style.display = "none";
     scoreList.style.display = "flex";
-  }
+  };
 });
 
-// Stringify the highScores
+//display high scores
+const allScores = document.querySelector("#allScores");
 
+var displayScores = JSON.parse(localStorage.getItem('scoreObject')) || {};
 
-//scoreList displays high scores and allows last entry to be cleared
-//need to store past scores in local storage and recall them to scoreList
-//need to add currentRecord to scoreList
-// let currentRecord;
+displayScores.forEach(function(scoreObject) {
+  var li = document.createElement("li");
+  li.textContent = scoreObject.userName + ": " + scoreObject.score;
+  allScores.appendChild(li);
+})
 
-
-//formats name and score and adds it to highScoresArray
-// function renderScores() {
-//   highScores.innerHTML = "";
-//   currentRecord = JSON.parse(localStorage.getItem("userEntry.name"));
-//   console.log(currentRecord.name, currentRecord);
-//   highScoresArray.push(currentRecord);
-// }
-// renderScores();
-// console.log(highScoresArray);
 
 //returns user to welcome screen
 btnGoBack.addEventListener("click", function () {
@@ -235,48 +228,9 @@ btnGoBack.addEventListener("click", function () {
 })
 
 //clears last scoreObject
-btnClearScore.addEventListener("click", function () {
-  JSON.parse(localStorage.)
-  highScoresArray.pop;
-})
-
-//function to add initials and score to an array
-
-
-
-// var initials = getName.value.trim();
-
-// //log high score button
-// btnLogScore.addEventListener("click", function (event) {
-//   event.preventDefault();
-//   //saves initials to local storage
-
-//   //changes to high Scores page
-//   enterHighScore.style.display = "none";
-//   scoreList.style.display = "flex";
-// })
-
-// //stores last entered score in an object
-// var lastScore = {
-//   initials: JSON.parse(localStorage.getItem("initials")),
-//   score: JSON.parse(localStorage.getItem("userScore"))
-// };
-
-// //brings lastScore object into an array containing all stored scores.
-// var allScores = [];
-
-// allScores.push(lastScore);
-// localStorage.setItem("allScores", JSON.stringify("allScores"));
-// console.log(allScores);
-
-// //TODO: Score List
-// highScores.textContent = JSON.parse(localStorage.getItem("allScores"));
-
-// btnGoBack.addEventListener("click", function () {
-//   scoreList.style.display = "none";
-//   welcomeScreen.style.display = "flex";
-// })
-
 // btnClearScore.addEventListener("click", function () {
-//   lastScore.pop();
+//   highScoresArray.splice(scoreObject, 1);
+//   localStorage.setItem('scoreObject', JSON.stringify(highScoresArray));
+//   window.location.reload();
 // })
+
