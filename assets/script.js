@@ -228,9 +228,8 @@ btnGoBack.addEventListener("click", function () {
 })
 
 //clears last scoreObject
-// btnClearScore.addEventListener("click", function () {
-//   highScoresArray.splice(scoreObject, 1);
-//   localStorage.setItem('scoreObject', JSON.stringify(highScoresArray));
-//   window.location.reload();
-// })
+btnClearScore.addEventListener("click", function () {
+  highScoresArray.pop();
+  localStorage.setItem('scoreObject', JSON.stringify(highScoresArray));
+})
 
