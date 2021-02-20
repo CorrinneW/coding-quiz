@@ -35,11 +35,16 @@ const recordName = document.querySelector("#recordName"); //lets user input init
 //TODO: view high scores <-- come back when high scores screen is done and use clickEvent to pull up screen
 // function viewHighScores() {}
 
-//start quiz button
+//start quiz button hides welcomeScreen and loads questionScreen
 btnStartQuiz.addEventListener("click", function () {
   welcomeScreen.style.display = "none";
   questionScreen.style.display = "flex";
-  playQuiz();
+  questionText.textContent = '';
+  answersList.textContent = '';
+  answerStatus.textContent = '';
+  timeLeft = 60;
+  countdown();
+  setQuestion();
 });
 
 //quiz questions and answers
@@ -98,20 +103,7 @@ let questionsArray = [
 
 let questionsCount = 0;
 
-let userScore = 0;
-
-let timeLeft = 90;
-
-function playQuiz() {
-  questionText.textContent = '';
-  answersList.textContent = '';
-  answerStatus.textContent = '';
-
-  countdown();
-  //countdown: timer counts down from 90 seconds during entire game. When complete, displays enterHighScore
-  setQuestion();
-}
-
+//quiz timer decrements 1/sec during game. Incorrect answers cause a 10 second decrement.
 let timeInterval;
 
 function countdown() {
@@ -125,19 +117,21 @@ function countdown() {
   }, 1000);
 }
 
+let userScore=0;
+
 //builds question using contents of array 
 function setQuestion() {
   //resets answersList to be re-populated with the next object's answerChoices
   answersList.textContent=''
   
   console.log(questionsArray[questionsCount]);
-
+  //pulls question text from the current object in questionsArray
   questionText.textContent = questionsArray[questionsCount].question;
   
   // for loop creates list items with answer choices that propagate to answersList
-  // pulls 
   for (var i = 0; i < questionsArray[questionsCount].answerChoices.length; i++) {
     var li = document.createElement("li");
+    //pulls each answer choice from the current object in questionsArray and sets it to a list item
     li.textContent = questionsArray[questionsCount].answerChoices[i];
     li.setAttribute("style", `color:white; background: var(--darkShade); margin-top: 15px; padding: 15px;`);
     answersList.appendChild(li);
@@ -146,30 +140,37 @@ function setQuestion() {
     li.addEventListener('click', function () {
       if (this.textContent === questionsArray[questionsCount].correctAnswer) {
         answerStatus.textContent = 'Correct!';
-        userScore = userScore + 100;
-        localStorage.setItem("userScore", JSON.stringify(userScore));
+        userScore = userScore + 10;
         } else {
         answerStatus.textContent = 'Incorrect';
         timeLeft = timeLeft - 10;
+        userScore = userScore - 5;
       }
       nextQuestion();              
     })       
   }  
 }
 
+//moves to the next object in questionsArray until the end is reached.
 function nextQuestion() {
   console.log(questionsCount);
   console.log(questionsArray.length);
+  //questionsCount starts at 0 and increments by 1 until questionsCount = index 8 (this is question 9 in questionsArray).
+  //the last increment and callback are allowed to run, but it is not allowed to run again at index 9 (question 10)
+  //this prevents the index from running out of questions and returning 'undefined', which stops endQuiz from running.
   if (questionsCount <= (questionsArray.length - 2)) {
   questionsCount++;
   setQuestion();
 } else {
-    timeLeft=0;
+    endQuiz();
   }
 }
 
 function endQuiz() {
-  console.log('game over');
+  recordedScore.textContent = "Your Score Is: " + userScore;
+  //sends userScore to local storage
+  localStorage.setItem("userScore", JSON.stringify(userScore))
+  //resets timer
   timer.textContent = '';
   clearInterval(timeInterval); 
   questionScreen.style.display = "none";
@@ -178,41 +179,53 @@ function endQuiz() {
 
 
 
-// //TODO: High Score Entry
-recordedScore.textContent = "Your Score Is: " + userScore;
+//High Score Entry
 
-var initials = getName.value.trim();
-
-//log high score button
-btnLogScore.addEventListener("click", function (event) {
-  //converts lastScore to string and sets to local storage
+btnLogScore.addEventListener("click", function () {
+  //pulls user input and stores it in local storage
+  var initials = getName.value.trim();
   localStorage.setItem("initials", JSON.stringify(initials));
-  //changes to high Scores page
   enterHighScore.style.display = "none";
   scoreList.style.display = "flex";
-})
+});
 
-//stores last entered score in an object
-var lastScore = {
-  initials: JSON.parse(localStorage.getItem("initials")),
-  score: JSON.parse(localStorage.getItem("userScore"))
-};
+//High Score List...add current local storage initials and scores to an array and save array to local storage. display array on page.
 
-//brings lastScore object into an array containing all stored scores.
-var allScores = [];
 
-allScores.push(lastScore);
-localStorage.setItem("allScores", JSON.stringify("allScores"));
-console.log(allScores);
 
-//TODO: Score List
-highScores.textContent = JSON.parse(localStorage.getItem("allScores"));
+// var initials = getName.value.trim();
 
-btnGoBack.addEventListener("click", function () {
-  scoreList.style.display = "none";
-  welcomeScreen.style.display = "flex";
-})
+// //log high score button
+// btnLogScore.addEventListener("click", function (event) {
+//   event.preventDefault();
+//   //saves initials to local storage
 
-btnClearScore.addEventListener("click", function () {
-  lastScore.pop();
-})
+//   //changes to high Scores page
+//   enterHighScore.style.display = "none";
+//   scoreList.style.display = "flex";
+// })
+
+// //stores last entered score in an object
+// var lastScore = {
+//   initials: JSON.parse(localStorage.getItem("initials")),
+//   score: JSON.parse(localStorage.getItem("userScore"))
+// };
+
+// //brings lastScore object into an array containing all stored scores.
+// var allScores = [];
+
+// allScores.push(lastScore);
+// localStorage.setItem("allScores", JSON.stringify("allScores"));
+// console.log(allScores);
+
+// //TODO: Score List
+// highScores.textContent = JSON.parse(localStorage.getItem("allScores"));
+
+// btnGoBack.addEventListener("click", function () {
+//   scoreList.style.display = "none";
+//   welcomeScreen.style.display = "flex";
+// })
+
+// btnClearScore.addEventListener("click", function () {
+//   lastScore.pop();
+// })
